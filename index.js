@@ -6,11 +6,13 @@ const categoriesRouters = require('./routes/Categories');
 const express = require("express");
 const server = express();
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 server.use(express.json());
 server.use("/products", productsRouters.router);
 server.use("/brands", brandsRouters.router);
 server.use("/categories", categoriesRouters.router);
+server.use(cors({exposedHeaders: ['X-Total-Count']}));
 
 main().catch((err) => console.log(err));
 
