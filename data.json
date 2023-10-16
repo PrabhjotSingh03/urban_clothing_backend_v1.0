@@ -2390,7 +2390,14 @@
       "id": 3
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "product": 7,
+      "quantity": 1,
+      "user": 1,
+      "id": 1
+    }
+  ],
   "orders": [
     {
       "items": [

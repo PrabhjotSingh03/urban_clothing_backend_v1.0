@@ -26,15 +26,15 @@ exports.addProductToCart = async (req, res) => {
 exports.deleteProductFromCart = async (req, res) => {
     const {id} = req.params;
     try {
-      const response = await Cart.findByIdAndDelete(id);
-      res.status(200).json(response);
+      const doc = await Cart.findByIdAndDelete(id);
+      res.status(200).json(doc);
     } catch (error) {
       console.error(error);
       res.status(400).json(error);
     }
   };
 
-  exports.cartUpdate = async (req, res) => {
+  exports.updateCart = async (req, res) => {
     const {id} = req.params;
     try {
       const cart = await Cart.findByIdAndUpdate(id, req.body, {new:true});

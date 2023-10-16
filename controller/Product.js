@@ -1,13 +1,13 @@
 const { Product } = require("../model/Product");
 
-exports.createProduct = async (req, res) => {
+exports.productCreate = async (req, res) => {
   const product = new Product(req.body);
   try {
     const response = await product.save();
     res.status(201).json(response);
-  } catch (err) {
-    console.error(err);
-    res.status(400).json(err);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(error);
   }
 };
 
@@ -38,9 +38,9 @@ exports.fetchAllProducts = async (req, res) => {
     const response = await query.exec();
     res.set("X-Total-Count", docsTotal);
     res.status(200).json(response);
-  } catch (err) {
-    console.error(err);
-    res.status(400).json(err);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(error);
   }
 };
 
@@ -49,9 +49,9 @@ exports.fetchProductById = async (req, res) => {
   try {
     const product = await Product.findById(id);
     res.status(200).json(product);
-  } catch (err) {
-    console.error(err);
-    res.status(400).json(err);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(error);
   }
 };
 
