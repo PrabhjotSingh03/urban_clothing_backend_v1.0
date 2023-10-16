@@ -23,6 +23,17 @@ exports.addProductToCart = async (req, res) => {
   }
 };
 
+exports.updateCart = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const cart = await Cart.findByIdAndUpdate(id, req.body, {new:true});
+    res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(error);
+  }
+};
+
 exports.deleteProductFromCart = async (req, res) => {
     const {id} = req.params;
     try {
@@ -33,15 +44,3 @@ exports.deleteProductFromCart = async (req, res) => {
       res.status(400).json(error);
     }
   };
-
-  exports.updateCart = async (req, res) => {
-    const {id} = req.params;
-    try {
-      const cart = await Cart.findByIdAndUpdate(id, req.body, {new:true});
-      res.status(200).json(cart);
-    } catch (error) {
-      console.error(error);
-      res.status(400).json(error);
-    }
-  };
-  
