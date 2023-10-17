@@ -5,6 +5,7 @@ const categoriesRouters = require('./routes/Categories');
 const usersRouters = require('./routes/Users');
 const authRouters = require('./routes/Auth');
 const cartRouters = require('./routes/Cart');
+const OrderRouters = require('./routes/Order');
 
 const express = require("express");
 const server = express();
@@ -19,6 +20,7 @@ server.use("/categories", categoriesRouters.router);
 server.use("/auth", authRouters.router);
 server.use("/users", usersRouters.router);
 server.use("/cart", cartRouters.router);
+server.use("/orders", OrderRouters.router);
 
 
 main().catch((error) => console.log(error));
