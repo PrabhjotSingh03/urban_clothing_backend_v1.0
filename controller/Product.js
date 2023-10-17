@@ -12,15 +12,21 @@ exports.productCreate = async (req, res) => {
 };
 
 exports.fetchAllProducts = async (req, res) => {
-  let query = Product.find({deleted:{$ne: true}});
-  let productsTotalQuery = Product.find({deleted:{$ne: true}});
+  let cond = {};
+  if (!req.query.admin) {
+    cond.deleted = {$ne:true};
+  }
+  let query = Product.find(cond);
+  let productsTotalQuery = Product.find(cond);
 
   if (req.query._sort && req.query._order) {
     query = query.sort({ [req.query._sort]: req.query._order });
   }
   if (req.query.category) {
     query = query.find({ category: req.query.category });
-    productsTotalQuery = productsTotalQuery.find({ category: req.query.category });
+    productsTotalQuery = productsTotalQuery.find({
+      category: req.query.category,
+    });
   }
   if (req.query.brand) {
     query = query.find({ brand: req.query.brand });
@@ -45,7 +51,7 @@ exports.fetchAllProducts = async (req, res) => {
 };
 
 exports.fetchProductById = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     const product = await Product.findById(id);
     res.status(200).json(product);
@@ -56,9 +62,11 @@ exports.fetchProductById = async (req, res) => {
 };
 
 exports.productUpdate = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
-    const product = await Product.findByIdAndUpdate(id, req.body, {new:true});
+    const product = await Product.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     res.status(200).json(product);
   } catch (error) {
     console.error(error);
