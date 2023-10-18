@@ -63,7 +63,7 @@ passport.use("local",
             return done(null, false, { message: "Invalid credentials" });
           } else {
             const token = jwt.sign(userSanitize(user), SECRET);
-            done(null, {token});
+            done(null, {id:user.id, role:user.role});
           }
         });
     } catch (error) {
