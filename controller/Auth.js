@@ -2,21 +2,32 @@ const { User } = require("../model/User");
 const crypto = require("crypto");
 const { userSanitize } = require("../services/common");
 const SECRET = "SECRET";
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 exports.createUser = async (req, res) => {
   try {
     const salt = crypto.randomBytes(16);
-    crypto.pbkdf2(req.body.password, salt, 310000, 32, "sha256",
+    crypto.pbkdf2(
+      req.body.password,
+      salt,
+      310000,
+      32,
+      "sha256",
       async function (error, hashedPassword) {
         const user = new User({ ...req.body, password: hashedPassword, salt });
         const response = await user.save();
-        req.login(userSanitize(response),(error)=>{
-          if(error){
+        req.login(userSanitize(response), (error) => {
+          if (error) {
             res.status(400).json(error);
-          } else{
+          } else {
             const token = jwt.sign(userSanitize(response), SECRET);
-            res.status(201).json(token);
+            res
+              .cookie("jwt", token, {
+                expires: new Date(Date.now() + 3600000),
+                httpOnly: true,
+              })
+              .status(201)
+              .json(token);
           }
         });
       }
@@ -28,9 +39,15 @@ exports.createUser = async (req, res) => {
 };
 
 exports.userLogin = async (req, res) => {
-  res.json(req.user);
+  res
+    .cookie("jwt", req.user.token, {
+      expires: new Date(Date.now() + 3600000),
+      httpOnly: true,
+    })
+    .status(201)
+    .json(req.user.token);
 };
 
 exports.userCheck = async (req, res) => {
-  res.json({status:"success",user:req.user});
+  res.json({ status: "success", user: req.user });
 };

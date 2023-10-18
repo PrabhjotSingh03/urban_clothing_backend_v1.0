@@ -20,13 +20,16 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const SECRET = "SECRET";
 const jwt = require('jsonwebtoken');
-const { isAuthenticate, userSanitize } = require("./services/common");
+const { isAuthenticate, userSanitize, cookieExtractor } = require("./services/common");
+const cookieParser = require("cookie-parser");
 
 //from passportjs
 const opts = {}
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = cookieExtractor;
 opts.secretOrKey = SECRET;
 
+server.use(cookieParser());
+server.use(express.static("build"));
 server.use(
   session({
     secret: "keyboard cat",
@@ -60,7 +63,7 @@ passport.use("local",
             return done(null, false, { message: "Invalid credentials" });
           } else {
             const token = jwt.sign(userSanitize(user), SECRET);
-            done(null, token);
+            done(null, {token});
           }
         });
     } catch (error) {
@@ -72,7 +75,7 @@ passport.use("local",
 passport.use("jwt", new JwtStrategy(opts, async function(jwt_payload, done) {
   console.log(jwt_payload);
   try{
-    const user = await User.findOne({id: jwt_payload.sub});
+    const user = await User.findById(jwt_payload.id);
     if (user) {
       return done(null, userSanitize(user));
   } else {
