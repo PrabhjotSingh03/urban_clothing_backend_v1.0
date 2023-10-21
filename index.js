@@ -9,6 +9,7 @@ const authRouters = require("./routes/Auth");
 const cartRouters = require("./routes/Cart");
 const OrderRouters = require("./routes/Order");
 const { User } = require("./model/User");
+const helmet = require('helmet');
 
 const express = require("express");
 const server = express();
@@ -27,6 +28,14 @@ const { Order } = require("./model/Order");
 
 //webhook
 const endpointSecret = process.env.ENDPOINT_Secret;
+
+server.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      'permissions-policy': 'attribution-reporting=(), ...',
+    },
+  })
+);
 
 server.post('/webhook', express.raw({type: 'application/json'}), async(request, response) => {
   const sig = request.headers['stripe-signature'];
