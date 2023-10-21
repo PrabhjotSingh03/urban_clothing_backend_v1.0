@@ -30,10 +30,12 @@ const { Order } = require("./model/Order");
 const endpointSecret = process.env.ENDPOINT_Secret;
 
 server.use(
-  helmet.contentSecurityPolicy({
+  helmet.contentSecurityPolicy(({
     directives: {
+      'default-src': ["'self'"],
+      'script-src': ["'self'", "https://js.stripe.com"],
       'permissions-policy': 'attribution-reporting=()',
-    },
+    }
   })
 );
 
