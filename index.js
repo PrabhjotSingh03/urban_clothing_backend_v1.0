@@ -32,7 +32,7 @@ const endpointSecret = process.env.ENDPOINT_Secret;
 server.use(
   helmet.contentSecurityPolicy({
     directives: {
-      'permissions-policy': 'attribution-reporting=(), ...',
+      'permissions-policy': 'attribution-reporting=()',
     },
   })
 );
