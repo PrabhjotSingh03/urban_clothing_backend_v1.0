@@ -78,6 +78,7 @@ server.use("/auth", authRouters.router);
 server.use("/users", isAuthenticate(), usersRouters.router);
 server.use("/cart", isAuthenticate(), cartRouters.router);
 server.use("/orders", isAuthenticate(), OrderRouters.router);
+server.get('*', (req, res) => res.sendFile(path.resolve('build', 'index.html')));
 
 passport.use("local",
   new LocalStrategy(
@@ -139,7 +140,7 @@ passport.deserializeUser(function (user, cb) {
 const stripe = require("stripe")(process.env.STRIPE_SERVER_KEY);
 
 server.post("/create-payment-intent", async (req, res) => {
-  const { totalAmount } = req.body;
+  const { totalAmount, order_id} = req.body;
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
@@ -149,6 +150,7 @@ server.post("/create-payment-intent", async (req, res) => {
     automatic_payment_methods: {
       enabled: true,
     },
+    metadata:{order_id}
   });
 
   res.send({
