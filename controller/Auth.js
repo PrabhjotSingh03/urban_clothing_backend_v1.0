@@ -42,7 +42,7 @@ exports.userLogin = async (req, res) => {
   const user = req.user;
   res
     .cookie("jwt", user.token, {
-      expires: new Date(Date.now() + 3600000),
+      expires: new Date(Date.now() + 200),
       httpOnly: true,
     })
     .status(201)
