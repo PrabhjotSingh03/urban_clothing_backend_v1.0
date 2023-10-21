@@ -36,7 +36,7 @@ server.use(
       'script-src': ["'self'", "https://js.stripe.com"],
       'permissions-policy': 'attribution-reporting=()',
     }
-  })
+  }))
 );
 
 server.post('/webhook', express.raw({type: 'application/json'}), async(request, response) => {
