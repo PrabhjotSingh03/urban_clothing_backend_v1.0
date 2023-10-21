@@ -94,12 +94,5 @@
       "src": "/",
       "dest": "build/index.js"
     }
-  ],
-  
-    "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "index.js"
-    }
   ]
 }
