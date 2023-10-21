@@ -29,14 +29,15 @@ const { Order } = require("./model/Order");
 //webhook
 const endpointSecret = process.env.ENDPOINT_Secret;
 
-server.use(
-  helmet.contentSecurityPolicy(({
-    directives: {
-      'default-src': ["'self'"],
-      'script-src': ["'self'", "https://js.stripe.com"],
-      'permissions-policy': 'attribution-reporting=()',
-    }
-  }))
+server.use(helmet({contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://js.stripe.com"],
+      },
+    },
+    permissionsPolicy: 'attribution-reporting=()',
+    },
+  )
 );
 
 server.post('/webhook', express.raw({type: 'application/json'}), async(request, response) => {
